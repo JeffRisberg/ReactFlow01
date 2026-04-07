@@ -6,7 +6,7 @@ const typeStyles = {
   module: { background: '#2d2d2d', color: '#e5e7eb',  border: '1px solid #4b5563' },
 };
 
-export default function ModuleNode({ data }) {
+export default function ModuleNode({ data, sourcePosition = Position.Bottom, targetPosition = Position.Top }) {
   const style = typeStyles[data.type] ?? typeStyles.module;
 
   return (
@@ -21,10 +21,10 @@ export default function ModuleNode({ data }) {
         boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
       }}
     >
-      <Handle type="target" position={Position.Top}    style={{ background: '#555' }} />
+      <Handle type="target" position={targetPosition} style={{ background: '#555' }} />
       <div style={{ fontWeight: 700, marginBottom: 3 }}>{data.label}</div>
       <div style={{ fontSize: 10, opacity: 0.75 }}>{data.description}</div>
-      <Handle type="source" position={Position.Bottom} style={{ background: '#555' }} />
+      <Handle type="source" position={sourcePosition} style={{ background: '#555' }} />
     </div>
   );
 }

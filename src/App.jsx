@@ -16,7 +16,14 @@ import ModuleNode from './ModuleNode';
 
 const nodeTypes = { moduleNode: ModuleNode };
 
-const initialNodes = moduleNodes.map((n) => ({ ...n, type: 'moduleNode' }));
+const verticalNodes = moduleNodes.map((n) => ({ ...n, type: 'moduleNode' }));
+const horizontalNodes = moduleNodes.map((n) => ({
+  ...n,
+  type: 'moduleNode',
+  position: { x: n.position.y * 2, y: n.position.x },
+  sourcePosition: 'right',
+  targetPosition: 'left',
+}));
 
 const initialEdges = moduleEdges.map((e) => ({
   ...e,
@@ -28,9 +35,18 @@ const initialEdges = moduleEdges.map((e) => ({
 }));
 
 export default function App() {
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [layout, setLayout] = useState('vertical');
+  const [nodes, setNodes, onNodesChange] = useNodesState(verticalNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [selected, setSelected] = useState(null);
+
+  const toggleLayout = useCallback(() => {
+    setLayout((prev) => {
+      const next = prev === 'vertical' ? 'horizontal' : 'vertical';
+      setNodes(next === 'horizontal' ? horizontalNodes : verticalNodes);
+      return next;
+    });
+  }, [setNodes]);
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -56,9 +72,22 @@ export default function App() {
         </p>
       </div>
 
+      {/* Layout toggle */}
+      <button
+        onClick={toggleLayout}
+        style={{
+          position: 'absolute', top: 16, right: 16, zIndex: 10,
+          background: '#1e1e1e', border: '1px solid #555', borderRadius: 8,
+          padding: '6px 12px', color: '#e5e7eb', fontSize: 12,
+          cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+        }}
+      >
+        {layout === 'vertical' ? '⇄ Horizontal' : '⇅ Vertical'}
+      </button>
+
       {/* Legend */}
       <div style={{
-        position: 'absolute', top: 16, right: 16, zIndex: 10,
+        position: 'absolute', top: 52, right: 16, zIndex: 10,
         background: '#1e1e1e', border: '1px solid #333', borderRadius: 8,
         padding: '10px 14px', color: '#e5e7eb', fontSize: 11,
       }}>
