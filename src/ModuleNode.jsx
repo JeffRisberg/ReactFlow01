@@ -1,30 +1,31 @@
-import { Handle, Position } from '@xyflow/react';
+import {Handle, Position} from '@xyflow/react';
 
-const typeStyles = {
-  root:   { background: '#1e3a5f', color: '#fff',     border: '2px solid #3b82f6' },
-  layer:  { background: '#1e4d3a', color: '#fff',     border: '2px solid #10b981' },
-  module: { background: '#2d2d2d', color: '#e5e7eb',  border: '1px solid #4b5563' },
+export const typeStyles = {
+    root: {label: 'Root', background: '#3b82f6', color: '#fff', border: '2px solid #3b82f6'},
+    layer: {label: 'Layer', background: '#1e4d3a', color: '#fff', border: '2px solid #10b981'},
+    module: {label: 'Module', background: '#2d2d2d', color: '#e5e7eb', border: '1px solid #4b5563'},
+    crossLayer: {label: 'Cross-layer dep.', background: '#f59e0b', color: '#fff', border: '2px solid #f59e0b'}
 };
 
-export default function ModuleNode({ data, sourcePosition = Position.Bottom, targetPosition = Position.Top }) {
-  const style = typeStyles[data.type] ?? typeStyles.module;
+export default function ModuleNode({data, sourcePosition = Position.Bottom, targetPosition = Position.Top}) {
+    const style = typeStyles[data.type] ?? typeStyles.module;
 
-  return (
-    <div
-      style={{
-        ...style,
-        borderRadius: 8,
-        padding: '10px 16px',
-        minWidth: 130,
-        textAlign: 'center',
-        fontSize: 13,
-        boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-      }}
-    >
-      <Handle type="target" position={targetPosition} style={{ background: '#555' }} />
-      <div style={{ fontWeight: 700, marginBottom: 3 }}>{data.label}</div>
-      <div style={{ fontSize: 10, opacity: 0.75 }}>{data.description}</div>
-      <Handle type="source" position={sourcePosition} style={{ background: '#555' }} />
-    </div>
-  );
+    return (
+        <div
+            style={{
+                ...style,
+                borderRadius: 8,
+                padding: '10px 16px',
+                minWidth: 130,
+                textAlign: 'center',
+                fontSize: 13,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
+            }}
+        >
+            <Handle type="target" position={targetPosition} style={{background: '#555'}}/>
+            <div style={{fontWeight: 700, marginBottom: 3}}>{data.label}</div>
+            <div style={{fontSize: 10, opacity: 0.75}}>{data.description}</div>
+            <Handle type="source" position={sourcePosition} style={{background: '#555'}}/>
+        </div>
+    );
 }

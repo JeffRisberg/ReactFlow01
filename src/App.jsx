@@ -12,7 +12,7 @@ import {
 import '@xyflow/react/dist/style.css';
 
 import { moduleNodes, moduleEdges } from './moduleData';
-import ModuleNode from './ModuleNode';
+import ModuleNode, { typeStyles } from './ModuleNode';
 
 const nodeTypes = { moduleNode: ModuleNode };
 
@@ -92,14 +92,9 @@ export default function App() {
         padding: '10px 14px', color: '#e5e7eb', fontSize: 11,
       }}>
         <div style={{ fontWeight: 700, marginBottom: 6 }}>Legend</div>
-        {[
-          { color: '#3b82f6', label: 'Root' },
-          { color: '#10b981', label: 'Layer' },
-          { color: '#4b5563', label: 'Module' },
-          { color: '#f59e0b', label: 'Cross-layer dep.' },
-        ].map(({ color, label }) => (
-          <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
-            <div style={{ width: 12, height: 12, background: color, borderRadius: 2 }} />
+        {Object.entries(typeStyles).map(([key, { label, background, border }]) => (
+          <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
+            <div style={{ width: 12, height: 12, background, border, borderRadius: 2, boxSizing: 'border-box' }} />
             {label}
           </div>
         ))}
@@ -132,9 +127,8 @@ export default function App() {
       >
         <MiniMap
           nodeColor={(n) => {
-            if (n.data?.type === 'root')  return '#3b82f6';
-            if (n.data?.type === 'layer') return '#10b981';
-            return '#4b5563';
+            const { border } = typeStyles[n.data?.type] ?? typeStyles.module;
+            return border.split(' ').pop();
           }}
           style={{ background: '#1a1a1a' }}
         />
